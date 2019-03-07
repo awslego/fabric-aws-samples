@@ -39,5 +39,5 @@ $ node invoke 4           // beer house
 
 
 #### reference 
-https://hyperledger-fabric.readthedocs.io/en/release-1.4/getting_started.html
-https://hyperledger-fabric.readthedocs.io/en/release-1.4/write_first_app.html
+- https://hyperledger-fabric.readthedocs.io/en/release-1.4/getting_started.html
+- https://hyperledger-fabric.readthedocs.io/en/release-1.4/write_first_app.html
