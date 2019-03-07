@@ -1,7 +1,7 @@
-# fabric-aws-samples
+# fabric-aws-samples : beer-supplychain
 
 
-## execution instructions
+## Execution Instructions
 ### 1.1 Chaincode (golang)
 
 ```
