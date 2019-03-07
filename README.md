@@ -23,7 +23,7 @@ $ ./upgradeFabric.sh go    // When chaincode is changed
 
 
   
-### 1.2 Chaincode Test (nodejs)
+### 1.3 Chaincode Test (nodejs)
 
 ```
 $ cd fabric-aws-samples
