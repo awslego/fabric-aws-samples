@@ -36,6 +36,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"time"
 )
 
 // Define the Smart Contract structure
@@ -53,9 +54,11 @@ const (
 )
 
 type Order struct {
-	State string `json:"State"`
+	State string `json:state"`
 	Count  string `json:"count"`
 	Owner  string `json:"owner"`
+	Ctime string `json:"ctime"`
+	Utime string `json:"utime"`
 }
 
 var State string;
@@ -100,9 +103,9 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 }
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
-
+	t :=time.Now()
 	orders := []Order{
-		Order{State: Created, Count: "0", Owner: "Genesis"},
+		Order{State: Created, Count: "0", Owner: "Genesis", Ctime:t.Format(time.RFC822), Utime:t.Format(time.RFC822) },
 	}
 
 
@@ -178,8 +181,8 @@ func (s *SmartContract) createOrder(APIstub shim.ChaincodeStubInterface, args []
 	if len(args) != 4 {
 		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
-
-	var order = Order{State: args[1], Count: args[2], Owner: args[3]}
+	t :=time.Now()
+	var order = Order{State: args[1], Count: args[2], Owner: args[3], Ctime:t.Format(time.RFC822), Utime:t.Format(time.RFC822)}
 
 	orderAsBytes, _ := json.Marshal(order)
 	APIstub.PutState(args[0], orderAsBytes)
@@ -204,6 +207,7 @@ func (s *SmartContract) changeOrder(APIstub shim.ChaincodeStubInterface, args []
 	} else if args[1] == "Owner" {
 		order.Owner = args[2]
 	}
+	order.Utime = (time.Now()).Format(time.RFC822)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState(args[0], orderAsBytes)
@@ -237,7 +241,7 @@ func (s *SmartContract) startTransfer(APIstub shim.ChaincodeStubInterface, args 
 	FirstCount = args[1];
 	order.Count = FirstCount
 	order.State = TransitionRequestPending;
-
+	order.Utime = (time.Now()).Format(time.RFC822)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
@@ -262,7 +266,7 @@ func (s *SmartContract) acceptTransfer(APIstub shim.ChaincodeStubInterface) sc.R
 	//Counterparty = RequestedCounterparty;
 	//RequestedCounterparty = "";
 	order.State = InTransit;
-
+	order.Utime = (time.Now()).Format(time.RFC822)
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
 
@@ -291,6 +295,7 @@ func (s *SmartContract) requestTransfer(APIstub shim.ChaincodeStubInterface, arg
 	order.Owner = args[0];
 	order.Count = args[1]
 	order.State = TransitionRequestPending;
+	order.Utime = (time.Now()).Format(time.RFC822)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
@@ -316,6 +321,7 @@ func (s *SmartContract) Complete(APIstub shim.ChaincodeStubInterface) sc.Respons
 	if (FirstCount != order.Count ) {
 		order.State = OutOfCompliance;
 	}
+	order.Utime = (time.Now()).Format(time.RFC822)
 	//PreviousCounterparty = Counterparty;
 	//Counterparty = "";
 
