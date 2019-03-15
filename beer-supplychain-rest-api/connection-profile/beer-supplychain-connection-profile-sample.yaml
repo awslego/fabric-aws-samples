@@ -1,0 +1,64 @@
+# Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# or in the "license" file accompanying this file. This file is distributed 
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+# express or implied. See the License for the specific language governing 
+# permissions and limitations under the License.
+
+# Sample connection profile for an Amazon Managed Blockchain Fabric network
+
+name: "ngo"
+x-type: "hlfv1"
+description: "NGO Network"
+version: "1.0"
+
+channels:
+  mychannel:
+    orderers:
+      - orderer.com
+    peers:
+      nd-4MHB4EKFCRF7VBHXZE2ZU4F6GY:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+organizations:
+  Org1:
+    mspid: m-B7YYBFY4GREBZLPCO2SUS4GP3I
+    peers:
+      - nd-4MHB4EKFCRF7VBHXZE2ZU4F6GY
+    certificateAuthorities:
+      - ca-org1
+
+orderers:
+  orderer.com:
+    url: grpcs://orderer.n-WDG36TTUD5HEJORZUPF4REKMBI.managedblockchain.us-east-1.amazonaws.com:30001
+    tlsCACerts:
+      path: /home/ec2-user/managedblockchain-tls-chain.pem
+
+peers:
+  nd-4MHB4EKFCRF7VBHXZE2ZU4F6GY:
+    url: grpcs://nd-4MHB4EKFCRF7VBHXZE2ZU4F6GY.m-B7YYBFY4GREBZLPCO2SUS4GP3I.n-WDG36TTUD5HEJORZUPF4REKMBI.managedblockchain.us-east-1.amazonaws.com:30003
+    grpcOptions:
+      ssl-target-name-override: nd-4MHB4EKFCRF7VBHXZE2ZU4F6GY
+    tlsCACerts:
+      path: /home/ec2-user/managedblockchain-tls-chain.pem
+
+certificateAuthorities:
+  ca-org1:
+    url: https://ca.m-B7YYBFY4GREBZLPCO2SUS4GP3I.n-WDG36TTUD5HEJORZUPF4REKMBI.managedblockchain.us-east-1.amazonaws.com:30002
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: /home/ec2-user/managedblockchain-tls-chain.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpwd
+    caName: m-B7YYBFY4GREBZLPCO2SUS4GP3I
