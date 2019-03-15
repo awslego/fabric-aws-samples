@@ -35,7 +35,6 @@ var queryChaincode = async function(peers, channelName, chaincodeName, args, fcn
 			chaincodeId: chaincodeName,
 			fcn: fcn,
 			args: args
-			//args: [JSON.stringify(args)]
 		};
 
 		logger.info('##### queryChaincode - Query request to Fabric %s', JSON.stringify(request));

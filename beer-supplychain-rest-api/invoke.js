@@ -43,7 +43,6 @@ var invokeChaincode = async function(peerNames, channelName, chaincodeName, args
 			chaincodeId: chaincodeName,
 			fcn: fcn,
 			args: args,
-			//args: [JSON.stringify(args)],
 			chainId: channelName,
 			txId: txId
 		};
@@ -102,7 +101,7 @@ var invokeChaincode = async function(peerNames, channelName, chaincodeName, args
 						} else {
 							let message = '##### invokeChaincode - The invoke chaincode transaction was valid.';
 							logger.info(message);
-							logger.info('@@@@@@@ %s, %s, %s, %s, %s, %s', fcn, JSON.stringify(args), channelName, chaincodeName, username, orgName);
+							logger.info('## %s, %s, %s, %s, %s, %s', fcn, JSON.stringify(args), channelName, chaincodeName, username, orgName);
 							resolve(message);
 						}
 					}, (err) => {
