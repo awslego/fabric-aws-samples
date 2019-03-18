@@ -105,7 +105,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	t :=time.Now()
 	orders := []Order{
-		Order{State: Created, Count: "0", Owner: "Genesis", Ctime:t.Format(time.RFC822), Utime:t.Format(time.RFC822) },
+		Order{State: Created, Count: "0", Owner: "Genesis", Ctime:t.Format(time.RFC1123), Utime:t.Format(time.RFC1123) },
 	}
 
 
@@ -181,8 +181,14 @@ func (s *SmartContract) createOrder(APIstub shim.ChaincodeStubInterface, args []
 	if len(args) != 4 {
 		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
+
+	currAsBytes, _ := APIstub.GetState("ORDER0")
+	curr := Order{}
+	json.Unmarshal(currAsBytes, &curr)
+
+
 	t :=time.Now()
-	var order = Order{State: args[1], Count: args[2], Owner: args[3], Ctime:t.Format(time.RFC822), Utime:t.Format(time.RFC822)}
+	var order = Order{State: args[1], Count: args[2], Owner: args[3], Ctime:curr.Ctime, Utime:t.Format(time.RFC1123)}
 
 	orderAsBytes, _ := json.Marshal(order)
 	APIstub.PutState(args[0], orderAsBytes)
@@ -207,7 +213,7 @@ func (s *SmartContract) changeOrder(APIstub shim.ChaincodeStubInterface, args []
 	} else if args[1] == "Owner" {
 		order.Owner = args[2]
 	}
-	order.Utime = (time.Now()).Format(time.RFC822)
+	order.Utime = (time.Now()).Format(time.RFC1123)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState(args[0], orderAsBytes)
@@ -230,18 +236,15 @@ func (s *SmartContract) startTransfer(APIstub shim.ChaincodeStubInterface, args 
 	//if (Counterparty != APIstub.getCreator() || (State != Created && State != InTransit) || newCounterparty == Device ) {
 	//creatorBytes, _ := APIstub.GetCreator()
 
-	//order.State = Created
 	if (order.State != Created ) {
 		return shim.Error("Incorect state  3")
 	}
-	
-	//RequestedCounterparty = args[0];
-	//RequestedCount = args[1];
+
 	order.Owner = args[0];
 	FirstCount = args[1];
 	order.Count = FirstCount
 	order.State = TransitionRequestPending;
-	order.Utime = (time.Now()).Format(time.RFC822)
+	order.Utime = (time.Now()).Format(time.RFC1123)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
@@ -257,16 +260,13 @@ func (s *SmartContract) acceptTransfer(APIstub shim.ChaincodeStubInterface) sc.R
 
 	//if (RequestedCounterparty != msg.sender || State != StateType.TransitionRequestPending)
 
-	//order.State = TransitionRequestPending
 	if (order.State != TransitionRequestPending) {
 		return shim.Error("Incorect state 2")
 	}
-	
-	//PreviousCounterparty = Counterparty;
-	//Counterparty = RequestedCounterparty;
-	//RequestedCounterparty = "";
+
 	order.State = InTransit;
-	order.Utime = (time.Now()).Format(time.RFC822)
+	order.Utime = (time.Now()).Format(time.RFC1123)
+
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
 
@@ -285,17 +285,14 @@ func (s *SmartContract) requestTransfer(APIstub shim.ChaincodeStubInterface, arg
 
 	//if (Counterparty != ms.sender || (State != Created && State != InTransit) || newCounterparty == Device ) {
 
-	//order.State = InTransit
 	if (order.State != InTransit) {
 		return shim.Error("Incorect state  4")
 	}
-	
-	//RequestedCounterparty = args[0];
-	//RequestedCount = args[1];
+
 	order.Owner = args[0];
 	order.Count = args[1]
 	order.State = TransitionRequestPending;
-	order.Utime = (time.Now()).Format(time.RFC822)
+	order.Utime = (time.Now()).Format(time.RFC1123)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
@@ -312,7 +309,6 @@ func (s *SmartContract) Complete(APIstub shim.ChaincodeStubInterface) sc.Respons
 
 	//if (SupplyChainOwner != msg.sender || State != StateType.InTransit)
 
-	//order.State = InTransit
 	if (order.State != InTransit) {
 		return shim.Error("Incorect state  1")
 	}
@@ -321,9 +317,7 @@ func (s *SmartContract) Complete(APIstub shim.ChaincodeStubInterface) sc.Respons
 	if (FirstCount != order.Count ) {
 		order.State = OutOfCompliance;
 	}
-	order.Utime = (time.Now()).Format(time.RFC822)
-	//PreviousCounterparty = Counterparty;
-	//Counterparty = "";
+	order.Utime = (time.Now()).Format(time.RFC1123)
 
 	orderAsBytes, _ = json.Marshal(order)
 	APIstub.PutState("ORDER0", orderAsBytes)
