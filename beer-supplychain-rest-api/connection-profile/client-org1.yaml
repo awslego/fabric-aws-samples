@@ -11,9 +11,9 @@
 # express or implied. See the License for the specific language governing 
 # permissions and limitations under the License.
 
-name: "ngo-org1"
+name: "beer-supplychain-org1"
 x-type: "hlfv1"
-description: "NGO client definition for Org1"
+description: "Beer supplychain client definition for Org1"
 version: "1.0"
 client:
   organization: Org1
