@@ -5,12 +5,12 @@
     "chaincodeName":"beer-supplychain",
     "eventWaitTime":"30000",
     "peers":[
-        "peer1"
+        "peer0"
     ],
     "admins":[
        {
-          "username":"sjkim",
-          "secret":"Jordan23"
+          "username":"admin",
+          "secret":"adminpw"
        }
     ]
  }

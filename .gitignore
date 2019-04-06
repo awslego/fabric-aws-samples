@@ -22,5 +22,8 @@ fabric-exports.sh
 tmp
 archive
 
+/bin
+/config
+
 .vscode
 .idea
