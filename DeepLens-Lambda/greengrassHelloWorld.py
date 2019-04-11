@@ -146,12 +146,12 @@ def infinite_infer_run():
                                 (xmin, ymin-text_offset),
                                 cv2.FONT_HERSHEY_SIMPLEX, 2.5, (255, 165, 20), 6)
 
-                    # Store label and probability to send to cloud
-                    # Store label and probability to send to cloud
-                    bottle = str(obj['label'])
-                    if bottle == '5' :
-                        object_count += 1
-                    cloud_output[output_map[obj['label']]] = object_count
+                    # Store label and number of objects to send to cloud
+                    
+                    # bottle = str(obj['label'])
+                    # if bottle == '5' :
+                    #     object_count += 1
+                    # cloud_output[output_map[obj['label']]] = object_count
             # Set the next frame in the local display stream.
             local_display.set_frame_data(frame)
             # Send results to the cloud
