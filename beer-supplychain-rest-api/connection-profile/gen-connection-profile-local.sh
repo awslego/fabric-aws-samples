@@ -21,14 +21,12 @@ REPODIR=~/fabric-aws-samples
 
 #CERTDIR points to the location of the fabric-samples repo. If you are using this to run Fabric, the crypto information
 #would have been generated in the first-network/crypto-config folder.
-CERTDIR=~/fabric-samples
+CERTDIR=~/fabric-aws-samples
 
 #copy the connection profiles
 mkdir -p $REPODIR/tmp/connection-profile/org1
-mkdir -p $REPODIR/tmp/connection-profile/org2
-cp beer-supplychain-connection-profile.yaml $REPODIR/tmp/connection-profile
+cp $REPODIR/beer-supplychain-rest-api/connection-profile/beer-supplychain-connection-profile-local.yaml $REPODIR/tmp/connection-profile/beer-supplychain-connection-profile.yaml
 cp client-org1.yaml $REPODIR/tmp/connection-profile/org1
-cp client-org2.yaml $REPODIR/tmp/connection-profile/org2
 
 #update the connection profiles to refer to the location of the Fabric crypto information
 if [[ "$OSTYPE" == "darwin"* ]]; then
