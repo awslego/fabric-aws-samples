@@ -24,7 +24,7 @@
     "swagger-jsdoc": "^3.2.7",
     "swagger-ui-express": "^4.0.2",
     "uuid": "^3.3.2",
-    "ws": "^6.1.0"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@theledger/fabric-mock-stub": "^3.0.0",
